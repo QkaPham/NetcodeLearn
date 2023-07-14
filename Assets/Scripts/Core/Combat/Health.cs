@@ -14,7 +14,6 @@ public class Health : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
-        Debug.Log(IsServer);
         CurrentHealth.Value = MaxHealth;
     }
 
