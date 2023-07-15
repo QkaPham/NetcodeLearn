@@ -49,6 +49,7 @@ public class ProjectileLauncher : NetworkBehaviour
             {
                 muzzleFlash.SetActive(false);
             }
+
         }
 
         if (!IsOwner) return;
