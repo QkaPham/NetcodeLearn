@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1370746905832029083, guid: de16f79e82855d24486f91411eff36f9, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1370746905832029083, guid: de16f79e82855d24486f91411eff36f9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -85,4 +85,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4b3b7d647a2a9548ad7229ea12fd54e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 7826701743839764811}
+--- !u!212 &7826701743839764811 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 6108116937164726972, guid: de16f79e82855d24486f91411eff36f9, type: 3}
+  m_PrefabInstance: {fileID: 4060668211249529847}
+  m_PrefabAsset: {fileID: 0}

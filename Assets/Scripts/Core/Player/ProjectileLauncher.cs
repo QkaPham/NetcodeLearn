@@ -14,12 +14,15 @@ public class ProjectileLauncher : NetworkBehaviour
     [SerializeField] private GameObject clientProjectilePrefab;
     [SerializeField] private GameObject muzzleFlash;
     [SerializeField] private Collider2D playerCollider;
+    [SerializeField] private CoinWallet wallet;
     [Header("Configs")]
     [SerializeField] private float projectileSpeed;
     [SerializeField] private float fireRate;
     [SerializeField] private float muzzleFlashDuration;
+    [SerializeField] private int costToFire;
+
     private bool shouldFire;
-    private float previousFireTime;
+    private float timer;
     private float muzzleFlashTimer;
 
     public override void OnNetworkSpawn()
@@ -49,21 +52,29 @@ public class ProjectileLauncher : NetworkBehaviour
         }
 
         if (!IsOwner) return;
+        if (timer > 0)
+        {
+            timer -= Time.deltaTime;
+        }
+
         if (!shouldFire) return;
-        if (Time.time < (1 / fireRate) + previousFireTime) return;
-        previousFireTime = Time.time;
+        if (timer > 0) return;
+        if (wallet.TotalCoins.Value < costToFire) return;
 
         PrimaryFireServerRpc(projectileSpawnPoint.position, projectileSpawnPoint.transform.rotation);
         SpawnDummyProjectile(projectileSpawnPoint.position, projectileSpawnPoint.transform.rotation);
+        timer = 1 / fireRate;
     }
 
     [ServerRpc]
     private void PrimaryFireServerRpc(Vector3 spawnPos, Quaternion rotation)
     {
+        if (wallet.TotalCoins.Value < costToFire) return;
+        wallet.SpendCoins(costToFire);
         var projectile = Instantiate(serverProjectilePrefab, spawnPos, rotation);
         Physics2D.IgnoreCollision(playerCollider, projectile.GetComponent<Collider2D>());
 
-        if(projectile.TryGetComponent<DealDamageOnContact>(out var dealDamage))
+        if (projectile.TryGetComponent<DealDamageOnContact>(out var dealDamage))
         {
             dealDamage.SetOwner(OwnerClientId);
         }

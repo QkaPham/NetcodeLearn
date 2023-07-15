@@ -1,9 +1,15 @@
-﻿using Unity.Netcode;
+﻿using System;
+using Unity.Netcode;
 using UnityEngine;
 
 public class CoinWallet : NetworkBehaviour
 {
     public NetworkVariable<int> TotalCoins = new NetworkVariable<int>();
+
+    internal void SpendCoins(int costToFire)
+    {
+        TotalCoins.Value -= costToFire;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

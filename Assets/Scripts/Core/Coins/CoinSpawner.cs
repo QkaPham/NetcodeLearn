@@ -16,6 +16,10 @@ public class CoinSpawner : NetworkBehaviour
         if (!IsServer) return;
         coinRadius = coinPrefab.GetComponent<CircleCollider2D>().radius;
 
+        for (int i = 0; i < maxCoins; i++)
+        {
+            SpawnCoin();
+        }
 
     }
 
@@ -23,6 +27,14 @@ public class CoinSpawner : NetworkBehaviour
     {
         var coin = Instantiate(coinPrefab, GetSpawnPoint(), Quaternion.identity);
         coin.SetValue(coinValue);
+        coin.GetComponent<NetworkObject>().Spawn();
+        coin.OnCollect += HandleCoinCollected;
+    }
+
+    private void HandleCoinCollected(RespawningCoin coin)
+    {
+        coin.transform.position = GetSpawnPoint();
+        coin.Reset();
     }
 
     private Vector2 GetSpawnPoint()
